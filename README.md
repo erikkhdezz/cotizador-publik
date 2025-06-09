@@ -9,7 +9,7 @@ Una aplicación web moderna y responsiva para cotizar productos impresos de form
 - **React**
 - **Tailwind CSS**
 - **Framer Motion**
-- **Next.js (compatible)**
+- **Vite**
 - **WhatsApp API (enlace directo)**
 
 ---
@@ -25,17 +25,6 @@ Una aplicación web moderna y responsiva para cotizar productos impresos de form
 
 ---
 
-## 📸 Vista previa
-
-> Modo Claro
-
-![Pantalla Inicio](./screenshots/pantalla_inicio_clara.png)
-
-> Modo Oscuro
-
-![Pantalla Categoría](./screenshots/pantalla_categoria_oscura.png)
-
----
 
 ## 🚀 Cómo ejecutar el proyecto localmente
 
@@ -49,3 +38,6 @@ npm install
 
 # Iniciar servidor local
 npm run dev
+```
+
+Luego abre `http://localhost:5173/` en tu navegador para ver la aplicación.

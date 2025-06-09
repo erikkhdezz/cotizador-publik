@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import WidgetProductoExpandible from "../components/WidgetProductoExpandible";
 import { motion } from "framer-motion";
 
+const CATALOGO = {
+  Lonas: [
+    { id: 1, name: "Lona 13oz", price: "$100/m²", image: "/lona.png", nuevo: true },
+    { id: 2, name: "Lona Mesh", price: "$120/m²", image: "/mesh.png", promo: true },
+    { id: 3, name: "Lona Backlight", price: "$150/m²", image: "/backlight.png" },
+  ],
+  Viniles: [
+    { id: 4, name: "Vinil Adhesivo", price: "$80/m²", image: "/vinil.png" },
+    { id: 5, name: "Vinil Microperforado", price: "$110/m²", image: "/microperforado.png" },
+  ],
+};
+
 export default function PantallaCategoria({ dark = false, categoria = "Lonas" }) {
+  const [categoriaActual, setCategoriaActual] = useState(categoria);
   const [productos, setProductos] = useState([]);
   const [vistaCuadricula, setVistaCuadricula] = useState(true);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
@@ -13,12 +27,8 @@ export default function PantallaCategoria({ dark = false, categoria = "Lonas" })
   const [cotizacionEnviada, setCotizacionEnviada] = useState(false);
 
   useEffect(() => {
-    setProductos([
-      { id: 1, name: "Lona 13oz", price: "$100/m²", image: "/lona.png", nuevo: true },
-      { id: 2, name: "Lona Mesh", price: "$120/m²", image: "/mesh.png", promo: true },
-      { id: 3, name: "Lona Backlight", price: "$150/m²", image: "/backlight.png" }
-    ]);
-  }, []);
+    setProductos(CATALOGO[categoriaActual] || []);
+  }, [categoriaActual]);
 
   const textColor = dark ? "text-white" : "text-[#1F1F1F]";
   const bgColor = dark ? "bg-[#1F1F1F]" : "bg-[#F7F3F7]";
@@ -45,7 +55,7 @@ export default function PantallaCategoria({ dark = false, categoria = "Lonas" })
     <div className={\`min-h-screen p-6 font-[Poppins] \${bgColor} \${textColor}\`}>
       <div className={\`flex items-center justify-between mb-4 sticky top-0 z-10 \${bgColor}\`}>
         <button onClick={() => window.history.back()}>⬅</button>
-        <h2 className="text-xl font-bold">{categoria}</h2>
+        <h2 className="text-xl font-bold">{categoriaActual}</h2>
         <button onClick={() => setVistaCuadricula(!vistaCuadricula)}>
           {vistaCuadricula ? "📋" : "🟦"}
         </button>
@@ -53,6 +63,17 @@ export default function PantallaCategoria({ dark = false, categoria = "Lonas" })
 
       <div className="mb-4">
         <p className="text-sm opacity-70">Todos los productos</p>
+        <div className="mt-2 flex gap-2 overflow-x-auto">
+          {Object.keys(CATALOGO).map((cat) => (
+            <Button
+              key={cat}
+              variant={cat === categoriaActual ? "default" : "ghost"}
+              onClick={() => setCategoriaActual(cat)}
+            >
+              {cat}
+            </Button>
+          ))}
+        </div>
       </div>
 
       <div className={\`grid \${vistaCuadricula ? "grid-cols-2" : "grid-cols-1"} gap-4\`}>
@@ -82,7 +103,16 @@ export default function PantallaCategoria({ dark = false, categoria = "Lonas" })
           <WidgetProductoExpandible dark={dark} />
           <div className="text-right mt-2">
             <Button variant="ghost" onClick={() => setMostrarConfirmacion(true)}>Continuar</Button>
-            <Button variant="ghost" onClick={() => setProductoSeleccionado(null)}>Cancelar</Button>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setProductoSeleccionado(null);
+                setNombreCliente("");
+                setErrorNombre(false);
+              }}
+            >
+              Cancelar
+            </Button>
           </div>
         </motion.div>
       )}
@@ -90,9 +120,8 @@ export default function PantallaCategoria({ dark = false, categoria = "Lonas" })
       {mostrarConfirmacion && !cotizacionEnviada && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8">
           <h4 className="text-lg font-semibold mb-2">Confirmar cotización</h4>
-          <input
+          <Input
             type="text"
-            className="w-full p-2 rounded border"
             placeholder="Tu nombre completo"
             value={nombreCliente}
             onChange={(e) => {
