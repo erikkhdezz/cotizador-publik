@@ -100,7 +100,7 @@ export default function PantallaCategoria({ dark = false, categoria = "Lonas" })
       {productoSeleccionado && !mostrarConfirmacion && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8">
           <h4 className="text-lg font-semibold mb-4">Cotizando: {productoSeleccionado.name}</h4>
-          <WidgetProductoExpandible dark={dark} />
+          <WidgetProductoExpandible dark={dark} producto={productoSeleccionado} />
           <div className="text-right mt-2">
             <Button variant="ghost" onClick={() => setMostrarConfirmacion(true)}>Continuar</Button>
             <Button
